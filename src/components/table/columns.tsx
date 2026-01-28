@@ -23,7 +23,7 @@ export const columns: ColumnDef<Customer>[] = [
         ),
     },
     { accessorKey: "name", header: "NAME" },
-    { accessorKey: "description", header: "DESCRIPTION" },
+    { accessorKey: "description", header: "DESCRIPTION", },
     {
         accessorKey: "status",
         header: "STATUS",

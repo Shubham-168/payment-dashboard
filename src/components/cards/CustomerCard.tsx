@@ -1,11 +1,5 @@
 import { memo } from "react";
-import {
-    Pencil,
-    Trash2,
-    ArrowDownCircle,
-    ArrowUpCircle,
-    CoinsIcon,
-} from "lucide-react";
+import { Pencil, Trash2, ArrowDownCircle, ArrowUpCircle, CoinsIcon, } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Customer } from "@/types/customer";
 
@@ -27,7 +21,7 @@ function CustomerCardComponent({ customer, onEdit, onDelete }: CustomerCardProps
 
     const deposit = customer.deposit;
     const balance = customer.balance;
-    const rate =  customer.rate;
+    const rate = customer.rate;
 
     return (
         <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-xs space-y-2">

@@ -237,7 +237,7 @@ export default function CustomerModal() {
 
                     <Button
                         type="submit"
-                        className="w-full bg-[#2264E5] text-[#FFFFFF]"
+                        className="w-full bg-[#2264E5] text-[#FFFFFF] hover:bg-[#1b53bc]"
                         disabled={isSubmitting}
                     >
                         {isSubmitting
