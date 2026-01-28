@@ -45,7 +45,7 @@ export const columns: ColumnDef<Customer>[] = [
     { accessorKey: "deposit", header: "DEPOSIT" },
     {
         id: "actions",
-        header: "",
+        header: "Action",
         cell: ({ row }) => {
             const { openModal, setEditing } = useUIStore();
 
@@ -54,7 +54,7 @@ export const columns: ColumnDef<Customer>[] = [
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8"
+                    className="h-8 w-8 text-slate-700 cursor-pointer hover:text-[#2264E5]"
                     onClick={() => {
                         setEditing(row.original);
                         openModal();

@@ -20,6 +20,7 @@ import { useCreateCustomer, useUpdateCustomer } from "../../hooks/useCustomers";
 import { v4 as uuid } from "uuid";
 import { useEffect, useMemo, useState } from "react";
 import type { Customer, Status } from "../../types/customer";
+import { toast } from "react-toastify";
 
 interface FormState {
     name: string;
@@ -97,7 +98,13 @@ export default function CustomerModal() {
             updateMutation.mutate(
                 { id: editingCustomer.id, data: payload },
                 {
-                    onSuccess: resetAndClose,
+                    onSuccess: () => {
+                        toast.success("Customer updated");
+                        resetAndClose();
+                    },
+                    onError: () => {
+                        toast.error("Failed to update customer");
+                    },
                 }
             );
         } else {
@@ -112,7 +119,13 @@ export default function CustomerModal() {
             };
 
             createMutation.mutate(customer, {
-                onSuccess: resetAndClose,
+                onSuccess: () => {
+                    toast.success("Customer created");
+                    resetAndClose();
+                },
+                onError: () => {
+                    toast.error("Failed to create customer");
+                },
             });
         }
     };
@@ -224,7 +237,7 @@ export default function CustomerModal() {
 
                     <Button
                         type="submit"
-                        className="w-full text-[#2264E5]"
+                        className="w-full bg-[#2264E5] text-[#FFFFFF]"
                         disabled={isSubmitting}
                     >
                         {isSubmitting

@@ -16,18 +16,13 @@ export interface CustomerListResponse {
 }
 
 export const customerApi = {
-    /**
-     * Returns the full, unfiltered list of customers.
-     * Used internally by mutations and list().
-     */
+   
     async getAll(): Promise<Customer[]> {
         await sleep();
         return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     },
 
-    /**
-     * Client-side filtered + paginated list.
-     */
+    
     async list(params: CustomerListParams): Promise<CustomerListResponse> {
         const { search = "", pageIndex, pageSize } = params;
 
@@ -62,7 +57,7 @@ export const customerApi = {
     async create(data: Customer): Promise<void> {
         await sleep();
         const list = await customerApi.getAll();
-        list.push(data);
+        list.unshift(data);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
     },
 

@@ -1,6 +1,6 @@
-import { NavLink } from "react-router-dom"
-import { CreditCard, LayoutDashboard, Users } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { NavLink } from "react-router-dom";
+import { CreditCard, LayoutDashboard, Users } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
     Sidebar,
     SidebarContent,
@@ -8,44 +8,39 @@ import {
     SidebarMenu,
     SidebarMenuItem,
     SidebarMenuButton,
-} from "@/components/ui/sidebar"
-import { useSidebar } from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const menu = [
     { name: "Payment History", icon: CreditCard, path: "/payment-history" },
     { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
     { name: "Users", icon: Users, path: "/users" },
-]
+];
 
 export default function AppSidebar() {
-    const { setOpen } = useSidebar()
-
     return (
         <Sidebar
             collapsible="icon"
-            className="fixed left-0 top-0 z-50 h-screen w-[40px] hover:w-[200px] transition-all duration-300 overflow-hidden bg-white border-r"
-            onMouseEnter={() => setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
+            className="bg-white border-r"
         >
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarMenu>
                         {menu.map((item) => (
                             <SidebarMenuItem key={item.path}>
-                                <SidebarMenuButton asChild>
+                                <SidebarMenuButton asChild tooltip={item.name}>
                                     <NavLink
                                         to={item.path}
                                         className={({ isActive }) =>
                                             cn(
-                                                "flex items-center gap-3 rounded-md p-2 transition",
+                                                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                                                 isActive
-                                                    ? "bg-[#2264E5] text-white"
-                                                    : "hover:bg-slate-200"
+                                                    ? "bg-[#2264E5] text-white shadow-sm"
+                                                    : "text-slate-700 hover:bg-slate-100"
                                             )
                                         }
                                     >
                                         <item.icon className="h-5 w-5 shrink-0" />
-                                        <span className="whitespace-nowrap opacity-0 group-hover:opacity-100 transition">
+                                        <span className="whitespace-nowrap">
                                             {item.name}
                                         </span>
                                     </NavLink>
@@ -56,5 +51,5 @@ export default function AppSidebar() {
                 </SidebarGroup>
             </SidebarContent>
         </Sidebar>
-    )
+    );
 }
