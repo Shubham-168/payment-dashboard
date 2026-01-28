@@ -3,73 +3,129 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-} from "../ui/dialog"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
-import { Label } from "../ui/label"
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "../ui/select"
+} from "../ui/select";
 
-import { useUIStore } from "../../store/useUIStore"
-import { useCreateCustomer } from "../../hooks/useCustomers"
-import { v4 as uuid } from "uuid"
-import { useState } from "react"
-import type { Status } from "../../types/customer"
+import { useUIStore } from "../../store/useUIStore";
+import { useCreateCustomer, useUpdateCustomer } from "../../hooks/useCustomers";
+import { v4 as uuid } from "uuid";
+import { useEffect, useMemo, useState } from "react";
+import type { Customer, Status } from "../../types/customer";
+
+interface FormState {
+    name: string;
+    description: string;
+    status: Status;
+    rate: string;
+    balance: string;
+    deposit: string;
+}
+
+const emptyForm: FormState = {
+    name: "",
+    description: "",
+    status: "Open",
+    rate: "",
+    balance: "",
+    deposit: "",
+};
 
 export default function CustomerModal() {
-    const { modalOpen, closeModal } = useUIStore()
-    const createMutation = useCreateCustomer()
+    const { modalOpen, closeModal, editingCustomer } = useUIStore();
+    const createMutation = useCreateCustomer();
+    const updateMutation = useUpdateCustomer();
 
-    const [form, setForm] = useState({
-        name: "",
-        description: "",
-        status: "Open" as Status,
-        rate: "",
-        balance: "",
-        deposit: "",
-    })
+    const isEditMode = useMemo(
+        () => editingCustomer !== null,
+        [editingCustomer]
+    );
+
+    const [form, setForm] = useState<FormState>(emptyForm);
+
+    useEffect(() => {
+        if (editingCustomer && modalOpen) {
+            setForm({
+                name: editingCustomer.name,
+                description: editingCustomer.description,
+                status: editingCustomer.status,
+                rate: String(editingCustomer.rate),
+                balance: String(editingCustomer.balance),
+                deposit: String(editingCustomer.deposit),
+            });
+        } else if (!modalOpen) {
+            setForm(emptyForm);
+        }
+    }, [editingCustomer, modalOpen]);
+
+    const resetAndClose = () => {
+        setForm(emptyForm);
+        closeModal();
+    };
+
+    const buildPayload = (): Partial<Customer> | null => {
+        const name = form.name.trim();
+        const rate = form.rate.trim();
+
+        if (!name || !rate) return null;
+
+        return {
+            name,
+            description: form.description.trim(),
+            status: form.status,
+            rate: Number(rate),
+            balance: form.balance ? Number(form.balance) : 0,
+            deposit: form.deposit ? Number(form.deposit) : 0,
+        };
+    };
 
     const submit = (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        if (!form.name.trim() || !form.rate) return
+        const payload = buildPayload();
+        if (!payload) return;
 
-        createMutation.mutate(
-            {
+        if (isEditMode && editingCustomer) {
+            updateMutation.mutate(
+                { id: editingCustomer.id, data: payload },
+                {
+                    onSuccess: resetAndClose,
+                }
+            );
+        } else {
+            const customer: Customer = {
                 id: uuid(),
-                name: form.name.trim(),
-                description: form.description.trim(),
-                status: form.status,
-                rate: Number(form.rate),
-                balance: form.balance ? Number(form.balance) : 0,
-                deposit: form.deposit ? Number(form.deposit) : 0,
-            },
-            {
-                onSuccess: () => {
-                    closeModal()
-                    setForm({
-                        name: "",
-                        description: "",
-                        status: "Open",
-                        rate: "",
-                        balance: "",
-                        deposit: "",
-                    })
-                },
-            }
-        )
-    }
+                name: payload.name ?? "",
+                description: payload.description ?? "",
+                status: payload.status ?? "Open",
+                rate: payload.rate ?? 0,
+                balance: payload.balance ?? 0,
+                deposit: payload.deposit ?? 0,
+            };
+
+            createMutation.mutate(customer, {
+                onSuccess: resetAndClose,
+            });
+        }
+    };
+
+    const isSubmitting = createMutation.isPending || updateMutation.isPending;
 
     return (
-        <Dialog open={modalOpen} onOpenChange={closeModal}>
+        <Dialog open={modalOpen} onOpenChange={resetAndClose}>
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>Add Customer</DialogTitle>
+                    <DialogTitle>
+                        {isEditMode ? "Edit Customer" : "Add Customer"}
+                    </DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={submit} className="space-y-4">
@@ -90,7 +146,10 @@ export default function CustomerModal() {
                         <Input
                             value={form.description}
                             onChange={(e) =>
-                                setForm({ ...form, description: e.target.value })
+                                setForm({
+                                    ...form,
+                                    description: e.target.value,
+                                })
                             }
                             placeholder="Short description"
                         />
@@ -111,7 +170,9 @@ export default function CustomerModal() {
                                 <SelectItem value="Open">Open</SelectItem>
                                 <SelectItem value="Paid">Paid</SelectItem>
                                 <SelectItem value="Due">Due</SelectItem>
-                                <SelectItem value="Inactive">Inactive</SelectItem>
+                                <SelectItem value="Inactive">
+                                    Inactive
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -136,7 +197,10 @@ export default function CustomerModal() {
                                 type="number"
                                 value={form.balance}
                                 onChange={(e) =>
-                                    setForm({ ...form, balance: e.target.value })
+                                    setForm({
+                                        ...form,
+                                        balance: e.target.value,
+                                    })
                                 }
                                 placeholder="0"
                             />
@@ -148,7 +212,10 @@ export default function CustomerModal() {
                                 type="number"
                                 value={form.deposit}
                                 onChange={(e) =>
-                                    setForm({ ...form, deposit: e.target.value })
+                                    setForm({
+                                        ...form,
+                                        deposit: e.target.value,
+                                    })
                                 }
                                 placeholder="500"
                             />
@@ -158,14 +225,20 @@ export default function CustomerModal() {
                     <Button
                         type="submit"
                         className="w-full text-[#2264E5]"
-                        disabled={createMutation.isPending}
+                        disabled={isSubmitting}
                     >
-                        {createMutation.isPending ? "Saving..." : "Save Customer"}
+                        {isSubmitting
+                            ? isEditMode
+                                ? "Updating..."
+                                : "Saving..."
+                            : isEditMode
+                              ? "Update Customer"
+                              : "Save Customer"}
                     </Button>
                 </form>
             </DialogContent>
         </Dialog>
-    )
+    );
 }
 
 
