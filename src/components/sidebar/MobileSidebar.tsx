@@ -17,6 +17,7 @@ export default function MobileSidebar({ open, onOpenChange }: MobileSidebarProps
             <NavLink
               key={item.path}
               to={item.path}
+              end={item.path === "/"}
               className={({ isActive }) =>
                 cn(
                   "flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",

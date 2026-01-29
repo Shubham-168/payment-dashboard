@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/tooltip"
 
 export const desktopMenu = [
-  { name: "Payment History", icon: CreditCard, path: "/payment-history" },
+  { name: "Payment History", icon: CreditCard, path: "/" },
   { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
   { name: "Users", icon: Users, path: "/users" },
 ]
@@ -36,6 +36,7 @@ export default function DesktopSidebar() {
               <NavLink
                 key={item.path}
                 to={item.path}
+                end={item.path === "/"}
                 className={({ isActive }) =>
                   cn(
                     "group flex items-center rounded-md px-2 py-2 text-xs font-medium transition-colors",
