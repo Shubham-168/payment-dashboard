@@ -146,7 +146,7 @@ export default function CustomerTable() {
                                         {hasSelection ? (
                                             <>
                                                 <span className="text-sm text-slate-700">
-                                                    {table.getSelectedRowModel().rows.length} selected
+                                                    {table.getSelectedRowModel().rows.length} {table.getSelectedRowModel().rows.length > 1 ? 'Rows' : 'Row'} Selected
                                                 </span>
                                                 <Button
                                                     size="icon"
@@ -307,16 +307,15 @@ export default function CustomerTable() {
 
                 </Table>
 
-
             </div>
 
             {/* Mobile card layout */}
             {/* <div className="md:hidden mt-2 space-y-4"> */}
-            <div className="md:hidden mt-2 flex flex-col h-[calc(100vh-64px)]">
+            <div className="md:hidden mt-1 flex flex-col h-[calc(100vh-64px)]">
 
                 {/* Toolbar */}
                 {/* <div className="mb-2 flex items-center justify-between gap-3"> */}
-                <div className="sticky top-1 z-20 bg-slate-50 pb-2 flex items-center justify-between gap-3">
+                <div className="sticky top-0 z-20 bg-slate-50 pb-2 flex items-center justify-between gap-3">
                     <Button
                         type="button"
                         size="icon"

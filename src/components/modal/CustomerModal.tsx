@@ -1,19 +1,8 @@
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "../ui/select";
 
 import { useUIStore } from "../../store/useUIStore";
 import { useCreateCustomer, useUpdateCustomer } from "../../hooks/useCustomers";
@@ -134,7 +123,7 @@ export default function CustomerModal() {
 
     return (
         <Dialog open={modalOpen} onOpenChange={resetAndClose}>
-            <DialogContent className="sm:max-w-lg">
+            <DialogContent className=" sm:max-w-lg origin-center animate-modal-zoom-in">
                 <DialogHeader>
                     <DialogTitle>
                         {isEditMode ? "Edit Customer" : "Add Customer"}
@@ -245,8 +234,8 @@ export default function CustomerModal() {
                                 ? "Updating..."
                                 : "Saving..."
                             : isEditMode
-                              ? "Update Customer"
-                              : "Save Customer"}
+                                ? "Update Customer"
+                                : "Save Customer"}
                     </Button>
                 </form>
             </DialogContent>

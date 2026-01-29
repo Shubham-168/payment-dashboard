@@ -1,73 +1,208 @@
-# React + TypeScript + Vite
+# 💳 Payment History Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive **Payment Management Dashboard** built with **React + Vite + Tailwind CSS + shadcn/ui + TanStack Table + React Query**.  
+Designed with a **professional SaaS-grade UI**, smooth UX, and fully responsive layouts for **desktop and mobile devices**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+### 📊 Dashboard Capabilities
+- Customer payment listing with **pagination**
+- **Search with debouncing**
+- **Add / Edit / Delete customers**
+- Confirmation dialogs using **SweetAlert2**
+- Toast notifications using **React Toastify**
+- **LocalStorage based persistence (Mock API)**
+- **Fully responsive design**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+### 🧭 Navigation & Layout
+- **Desktop:** Hover-expandable collapsible sidebar
+- **Mobile:** Hamburger-driven sidebar drawer
+- Fixed **top navbar for mobile**
+- Professional **layout hierarchy & spacing**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🖥 Desktop Table View
+- Fixed **header + footer**
+- Scrollable **table body**
+- Search + toolbar inside table header
+- Pagination footer
+- Tooltip for truncated text
+- Status badges
+- Selection + bulk delete
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 📱 Mobile View (Card Layout)
+- Card based UI instead of table
+- Fixed toolbar (**Add + Search**)
+- Only card list scrolls
+- Touch friendly UX
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🧠 Tech Stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+| Tech | Purpose |
+|--------|----------|
+| **React 18 + Vite** | Fast modern frontend |
+| **Tailwind CSS** | Utility-first styling |
+| **shadcn/ui** | High quality UI components |
+| **TanStack Table v8** | Advanced table features |
+| **TanStack Query (React Query)** | API caching & state |
+| **SweetAlert2** | Confirmation dialogs |
+| **React Toastify** | Toast notifications |
+| **Lucide Icons** | Modern icon system |
+
+---
+
+## 📁 Project Structure
+
+src/
+├─ components/
+│ ├─ sidebar/
+│ ├─ layout/
+│ ├─ table/
+│ ├─ modal/
+│ ├─ cards/
+│ └─ ui/ # shadcn/ui components
+│
+├─ hooks/
+├─ services/
+├─ pages/
+├─ store/
+├─ types/
+└─ lib/
+
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/Shubham-168/payment-dashboard.git
+cd payment-dashboard
+
+2️⃣ Install Dependencies
+npm install
+
+3️⃣ Start Development Server
+npm run dev
+
+
+Open:
+👉 http://localhost:5173
+
+🔐 Environment Variables
+
+Not required (localStorage-based mock backend is used).
+
+🗃 LocalStorage API Design
+
+This project uses LocalStorage as a mock backend.
+
+Key used:
+
+customers
+
+Data Shape:
+interface Customer {
+  id: string;
+  name: string;
+  description: string;
+  status: "Open" | "Paid" | "Due" | "Inactive";
+  rate: number;
+  balance: number;
+  deposit: number;
+}
+
+🧩 Major Functional Modules
+✔ Customer CRUD
+
+Create customer (modal)
+
+Update customer (modal)
+
+Delete single / bulk customers
+
+SweetAlert confirmation dialogs
+
+✔ Search & Pagination
+
+Debounced search input
+
+Server-like pagination simulation
+
+Page size selector
+
+Dynamic page navigation
+
+✔ Responsive UI
+
+Desktop → Table Layout
+
+Mobile → Card Layout
+
+Mobile sidebar drawer navigation
+
+Fixed top navbar
+
+🎨 UI Design Goals
+
+SaaS-grade dashboard UI
+
+Pixel perfect spacing
+
+Consistent typography
+
+High contrast accessibility
+
+Touch friendly mobile UX
+
+🧪 Demo Data
+
+Dummy customers are auto-generated for UI testing.
+
+🛠 Recommended VS Code Extensions
+
+Tailwind CSS IntelliSense
+
+ESLint
+
+Prettier
+
+Error Lens
+
+🔮 Future Enhancements
+
+Real backend integration (Node / Supabase / Firebase)
+
+Authentication system
+
+Role-based access
+
+Export reports (CSV / PDF)
+
+Charts & analytics dashboard
+
+👨‍💻 Author
+
+Shubham Saini
+Frontend Developer (React / Next.js / UI Engineering)
+
+⭐ If you like this project
+
+Please ⭐ star this repository and share feedback!
+
+📝 License
+
+MIT License — free for personal & commercial use.
+
+
+

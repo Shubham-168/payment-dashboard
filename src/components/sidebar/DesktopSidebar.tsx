@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { NavLink } from "react-router-dom"
-import { CreditCard, LayoutDashboard, Users } from "lucide-react"
+import { CreditCard, LayoutDashboard, User, Users } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
   Tooltip,
