@@ -62,7 +62,7 @@ export const customerApi = {
   async list(params: CustomerListParams): Promise<CustomerListResponse> {
     const { search = "", pageIndex, pageSize } = params;
 
-    const all = await this.getAll();
+    const all = await customerApi.getAll();
     const query = search.trim().toLowerCase();
 
     const filtered = query
@@ -94,14 +94,14 @@ export const customerApi = {
 
   async create(data: Customer): Promise<void> {
     await sleep();
-    const list = await this.getAll();
+    const list = await customerApi.getAll();
     list.unshift(data);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   },
 
   async update(id: string, data: Partial<Customer>): Promise<void> {
     await sleep();
-    const list = await this.getAll();
+    const list = await customerApi.getAll();
     const updated = list.map((c) =>
       c.id === id ? { ...c, ...data } : c
     );
@@ -110,7 +110,7 @@ export const customerApi = {
 
   async delete(ids: string[]): Promise<void> {
     await sleep();
-    const list = await this.getAll();
+    const list = await customerApi.getAll();
     const filtered = list.filter((c) => !ids.includes(c.id));
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   },
