@@ -8,10 +8,9 @@ import CustomerCard from "../cards/CustomerCard";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "../ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "../ui/table";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow, } from "../ui/table";
 import { columns } from "./columns";
-import Swal from "sweetalert2"
-import { CellWithTooltip } from "./CellWithTooltip";
+import Swal from "sweetalert2";
 
 
 const DEBOUNCE_MS = 400;
@@ -136,10 +135,11 @@ export default function CustomerTable() {
             {/* Desktop table layout */}
             <div className="hidden md:flex bg-white rounded-xl shadow-sm flex-col h-[calc(100vh-5rem)] overflow-hidden">
 
-                <Table className="w-full table-fixed">
+                <Table className="w-full h-full table-fixed grid grid-rows-[auto_1fr_auto]">
+
+                    {/* Header */}
                     <TableHeader className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b">
-                        {/* Toolbar Row */}
-                        <TableRow>
+                        <TableRow className="table w-full h-[56px]">
                             <TableHead colSpan={columns.length}>
                                 <div className="flex items-center justify-between gap-4 py-3">
                                     <div className="flex-1 flex items-center gap-3">
@@ -182,27 +182,25 @@ export default function CustomerTable() {
                             </TableHead>
                         </TableRow>
 
-                        {/* Column Headers */}
                         {table.getHeaderGroups().map((hg) => (
-                            <TableRow key={hg.id}>
+                            <TableRow key={hg.id} className="table w-full h-[44px]">
                                 {hg.headers.map((header) => (
                                     <TableHead
                                         key={header.id}
-                                        className="text-sm font-semibold whitespace-nowrap"
+                                        style={{ width: header.getSize() }}
+                                        className="text-xs text-start lg:text-sm font-semibold"
                                     >
-                                        {flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
+                                        {flexRender(header.column.columnDef.header, header.getContext())}
                                     </TableHead>
                                 ))}
                             </TableRow>
                         ))}
                     </TableHeader>
 
-                    <TableBody>
+                    {/* Scrollable Body */}
+                    <TableBody className="block overflow-y-auto">
                         {table.getRowModel().rows.length === 0 ? (
-                            <TableRow>
+                            <TableRow className="table w-full">
                                 <TableCell
                                     colSpan={columns.length}
                                     className="h-full text-center text-muted-foreground"
@@ -212,100 +210,113 @@ export default function CustomerTable() {
                             </TableRow>
                         ) : (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id}>
+                                <TableRow
+                                    key={row.id}
+                                    className="table w-full table-fixed h-[48px]"
+                                >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            <CellWithTooltip>
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </CellWithTooltip>
+                                        <TableCell
+                                            key={cell.id}
+                                            style={{ width: cell.column.getSize() }}
+                                            className="truncate text-start"
+                                        >
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
                                 </TableRow>
                             ))
                         )}
                     </TableBody>
+
+                    {/* Footer */}
+                    <TableFooter className="sticky bottom-0 z-20 bg-white/90 backdrop-blur-md border-t">
+                        <TableRow className="table w-full h-[56px]">
+                            <TableCell colSpan={columns.length}>
+                                <div className="flex items-center justify-between p-4 text-sm">
+                                    <span>
+                                        {pageStart}–{pageEnd} of {total}
+                                    </span>
+                                    <div className="flex items-center gap-4">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs text-muted-foreground">
+                                                Rows per page
+                                            </span>
+                                            <Select
+                                                value={String(pagination.pageSize)}
+                                                onValueChange={(value) => {
+                                                    const size = Number(value);
+                                                    setPagination({
+                                                        pageIndex: 0,
+                                                        pageSize: size,
+                                                    });
+                                                }}
+                                            >
+                                                <SelectTrigger className="h-8 w-[72px]">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {[10, 20, 30, 40, 50].map(
+                                                        (size) => (
+                                                            <SelectItem
+                                                                key={size}
+                                                                value={String(size)}
+                                                            >
+                                                                {size}
+                                                            </SelectItem>
+                                                        )
+                                                    )}
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                size="icon"
+                                                variant="outline"
+                                                className="h-8 w-8"
+                                                onClick={() => table.previousPage()}
+                                                disabled={
+                                                    !table.getCanPreviousPage() ||
+                                                    deleteMutation.isPending
+                                                }
+                                            >
+                                                {"<"}
+                                            </Button>
+                                            <span className="text-xs text-muted-foreground">
+                                                {pagination.pageIndex + 1} of{" "}
+                                                {totalPages}
+                                            </span>
+                                            <Button
+                                                size="icon"
+                                                variant="outline"
+                                                className="h-8 w-8"
+                                                onClick={() => table.nextPage()}
+                                                disabled={
+                                                    !table.getCanNextPage() ||
+                                                    deleteMutation.isPending
+                                                }
+                                            >
+                                                {">"}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+
                 </Table>
 
-                <div className="sticky bottom-0 z-20 bg-white/90 backdrop-blur-md border-t">
-                    <div className="flex items-center justify-between p-4 text-sm">
-                        <span>
-                            {pageStart}–{pageEnd} of {total}
-                        </span>
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
-                                <span className="text-xs text-muted-foreground">
-                                    Rows per page
-                                </span>
-                                <Select
-                                    value={String(pagination.pageSize)}
-                                    onValueChange={(value) => {
-                                        const size = Number(value);
-                                        setPagination({
-                                            pageIndex: 0,
-                                            pageSize: size,
-                                        });
-                                    }}
-                                >
-                                    <SelectTrigger className="h-8 w-[72px]">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {[10, 20, 30, 40, 50].map(
-                                            (size) => (
-                                                <SelectItem
-                                                    key={size}
-                                                    value={String(size)}
-                                                >
-                                                    {size}
-                                                </SelectItem>
-                                            )
-                                        )}
-                                    </SelectContent>
-                                </Select>
-                            </div>
 
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    size="icon"
-                                    variant="outline"
-                                    className="h-8 w-8"
-                                    onClick={() => table.previousPage()}
-                                    disabled={
-                                        !table.getCanPreviousPage() ||
-                                        deleteMutation.isPending
-                                    }
-                                >
-                                    {"<"}
-                                </Button>
-                                <span className="text-xs text-muted-foreground">
-                                    {pagination.pageIndex + 1} of{" "}
-                                    {totalPages}
-                                </span>
-                                <Button
-                                    size="icon"
-                                    variant="outline"
-                                    className="h-8 w-8"
-                                    onClick={() => table.nextPage()}
-                                    disabled={
-                                        !table.getCanNextPage() ||
-                                        deleteMutation.isPending
-                                    }
-                                >
-                                    {">"}
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             {/* Mobile card layout */}
-            <div className="md:hidden mt-2 space-y-4">
+            {/* <div className="md:hidden mt-2 space-y-4"> */}
+            <div className="md:hidden mt-2 flex flex-col h-[calc(100vh-64px)]">
+
                 {/* Toolbar */}
-                <div className="mb-2 flex items-center justify-between gap-3">
+                {/* <div className="mb-2 flex items-center justify-between gap-3"> */}
+                <div className="sticky top-1 z-20 bg-slate-50 pb-2 flex items-center justify-between gap-3">
                     <Button
                         type="button"
                         size="icon"
@@ -331,7 +342,9 @@ export default function CustomerTable() {
                         No data to display
                     </div>
                 ) : (
-                    <div className="space-y-3">
+                    // <div className="space-y-3 mt-2 overflow-y-auto">
+                    <div className="flex-1 space-y-3 overflow-y-auto pr-1">
+
                         {customers.map((customer) => (
                             <CustomerCard
                                 key={customer.id}

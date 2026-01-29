@@ -62,20 +62,20 @@ function CustomerCardComponent({ customer, onEdit, onDelete }: CustomerCardProps
 
             {/* Row 3 */}
             <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+                <div className="flex items-center gap-1 text-yellow-600">
+                    <CoinsIcon className="h-3.5 w-3.5" />
+                    <span className="font-medium">Rate:</span>
+                    <span className="text-[11px]">₹{rate.toLocaleString()}</span>
+                </div>
                 <div className="flex items-center gap-1 text-emerald-600">
                     <ArrowDownCircle className="h-3.5 w-3.5" />
                     <span className="font-medium">Deposit:</span>
-                    <span>₹{deposit.toLocaleString()}</span>
+                    <span className="text-[11px]">₹{deposit.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center gap-1 text-sky-700">
                     <ArrowUpCircle className="h-3.5 w-3.5" />
                     <span className="font-medium">Balance:</span>
-                    <span>₹{balance.toLocaleString()}</span>
-                </div>
-                <div className="flex items-center gap-1 text-yellow-600">
-                    <CoinsIcon className="h-3.5 w-3.5" />
-                    <span className="font-medium">Rate:</span>
-                    <span>₹{rate.toLocaleString()}</span>
+                    <span className="text-[11px]">₹{balance.toLocaleString()}</span>
                 </div>
             </div>
         </div>

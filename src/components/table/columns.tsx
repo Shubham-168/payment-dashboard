@@ -5,10 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import type { Customer } from "@/types/customer";
 import { useUIStore } from "@/store/useUIStore";
+import { CellWithTooltip } from "./CellWithTooltip";
 
 export const columns: ColumnDef<Customer>[] = [
     {
         id: "select",
+        size: 50,
+        // minSize: 36,
+        // maxSize: 36,
         header: ({ table }) => (
             <Checkbox
                 checked={table.getIsAllPageRowsSelected()}
@@ -21,9 +25,24 @@ export const columns: ColumnDef<Customer>[] = [
                 onCheckedChange={(v) => row.toggleSelected(!!v)}
             />
         ),
+        enableSorting: false,
+        enableHiding: false,
     },
-    { accessorKey: "name", header: "NAME" },
-    { accessorKey: "description", header: "DESCRIPTION", },
+    {
+        accessorKey: "name",
+        header: "NAME",
+        size: 150,
+        cell: ({ row }) => (
+            <CellWithTooltip> {row.getValue('name')} </CellWithTooltip>
+        ),
+    },
+    { accessorKey: "description", 
+        header: "DESCRIPTION", 
+        size: 280, 
+        cell: ({ row }) => (
+            <CellWithTooltip> {row.getValue('description')} </CellWithTooltip>
+        ),
+    },
     {
         accessorKey: "status",
         header: "STATUS",
@@ -46,6 +65,7 @@ export const columns: ColumnDef<Customer>[] = [
     {
         id: "actions",
         header: "Action",
+        size: 80,
         cell: ({ row }) => {
             const { openModal, setEditing } = useUIStore();
 
