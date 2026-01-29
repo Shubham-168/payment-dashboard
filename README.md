@@ -1,4 +1,4 @@
-# 💳 Payment History Dashboard
+# 💳 Payment Management Dashboard
 
 A modern, responsive **Payment Management Dashboard** built with **React + Vite + Tailwind CSS + shadcn/ui + TanStack Table + React Query**.  
 Designed with a **professional SaaS-grade UI**, smooth UX, and fully responsive layouts for **desktop and mobile devices**.
