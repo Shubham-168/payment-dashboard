@@ -144,7 +144,7 @@ export default function CustomerModal() {
                     </div>
 
                     <div className="space-y-1">
-                        <Label>Description</Label>
+                        <Label>Description *</Label>
                         <Input
                             value={form.description}
                             onChange={(e) =>
@@ -154,6 +154,7 @@ export default function CustomerModal() {
                                 })
                             }
                             placeholder="Short description"
+                            required
                         />
                     </div>
 
@@ -165,7 +166,7 @@ export default function CustomerModal() {
                                 setForm({ ...form, status: v as Status })
                             }
                         >
-                            <SelectTrigger>
+                            <SelectTrigger className="cursor-pointer">
                                 <SelectValue placeholder="Select status" />
                             </SelectTrigger>
                             <SelectContent>
@@ -226,7 +227,7 @@ export default function CustomerModal() {
 
                     <Button
                         type="submit"
-                        className="w-full bg-[#2264E5] text-[#FFFFFF] hover:bg-[#1b53bc]"
+                        className="w-full bg-[#2264E5] text-[#FFFFFF] cursor-pointer hover:bg-[#1b53bc]"
                         disabled={isSubmitting}
                     >
                         {isSubmitting

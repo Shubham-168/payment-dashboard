@@ -2,7 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import { Minus, Pencil } from "lucide-react";
 import type { Customer } from "@/types/customer";
 import { useUIStore } from "@/store/useUIStore";
 import { CellWithTooltip } from "./CellWithTooltip";
@@ -10,24 +10,59 @@ import { CellWithTooltip } from "./CellWithTooltip";
 export const columns: ColumnDef<Customer>[] = [
     {
         id: "select",
-        size: 50,
-        // minSize: 36,
-        // maxSize: 36,
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected()}
-                onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
-            />
-        ),
+        size: 40,
+        header: ({ table }) => {
+            const isAll = table.getIsAllPageRowsSelected();
+            const isSome = table.getIsSomePageRowsSelected();
+
+            return (
+                <button
+                    type="button"
+                    onClick={() => {
+                        if (isAll || isSome) {
+                            table.resetRowSelection(); 
+                        } else {
+                            table.toggleAllPageRowsSelected(true); 
+                        }
+                    }}
+                    className={`
+                  h-4 w-4 rounded-[4px] border flex items-center justify-center cursor-pointer
+                  transition-colors
+                  ${isAll || isSome ? "bg-[#2264E5] border-[#2264E5]" : "bg-white border-slate-300"}
+                `}
+                >
+                    {isAll && (
+                        <svg
+                            viewBox="0 0 24 24"
+                            className="h-3 w-3 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    )}
+
+                    {isSome && !isAll && (
+                        <Minus className="block h-[2px] w-[10px] bg-white rounded" />
+                    )}
+                </button>
+            );
+        },
+
         cell: ({ row }) => (
             <Checkbox
                 checked={row.getIsSelected()}
-                onCheckedChange={(v) => row.toggleSelected(!!v)}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                className="cursor-pointer"
             />
         ),
         enableSorting: false,
         enableHiding: false,
     },
+
     {
         accessorKey: "name",
         header: "NAME",
@@ -36,9 +71,10 @@ export const columns: ColumnDef<Customer>[] = [
             <CellWithTooltip> {row.getValue('name')} </CellWithTooltip>
         ),
     },
-    { accessorKey: "description", 
-        header: "DESCRIPTION", 
-        size: 280, 
+    {
+        accessorKey: "description",
+        header: "DESCRIPTION",
+        size: 280,
         cell: ({ row }) => (
             <CellWithTooltip> {row.getValue('description')} </CellWithTooltip>
         ),

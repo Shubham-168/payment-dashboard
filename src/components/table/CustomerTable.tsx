@@ -146,15 +146,15 @@ export default function CustomerTable() {
                                         {hasSelection ? (
                                             <>
                                                 <span className="text-sm text-slate-700">
-                                                    {table.getSelectedRowModel().rows.length} {table.getSelectedRowModel().rows.length > 1 ? 'Rows' : 'Row'} Selected
+                                                    {table.getSelectedRowModel().rows.length} selected
                                                 </span>
                                                 <Button
                                                     size="icon"
                                                     variant="outline"
-                                                    className="h-9 w-9 text-[#2264E5]"
+                                                    className="h-9 w-9 text-red-800 cursor-pointer hover:text-red-900"
                                                     onClick={handleDelete}
                                                 >
-                                                    <Trash2 className="w-4 h-4" />
+                                                    <Trash2 className="w-4 h-4 " />
                                                 </Button>
                                             </>
                                         ) : (
@@ -173,7 +173,7 @@ export default function CustomerTable() {
                                             openModal()
                                         }}
                                         size="sm"
-                                        className="bg-[#2264E5] text-white hover:bg-[#1b53bc]"
+                                        className="bg-[#2264E5] text-white cursor-pointer hover:bg-[#1b53bc]"
                                     >
                                         <Plus className="w-4 h-4 mr-2" />
                                         Add Customer
@@ -212,7 +212,8 @@ export default function CustomerTable() {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    className="table w-full table-fixed h-[48px]"
+                                    data-state={row.getIsSelected() && "selected"}
+                                    className={` table w-full h-[48px] transition-colors  ${row.getIsSelected() ? "bg-[#2264E5]/60  ring-[#2264E5]/30" : "hover:bg-slate-50"} `}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell
@@ -251,7 +252,7 @@ export default function CustomerTable() {
                                                     });
                                                 }}
                                             >
-                                                <SelectTrigger className="h-8 w-[72px]">
+                                                <SelectTrigger className="h-8 w-[72px] cursor-pointer">
                                                     <SelectValue />
                                                 </SelectTrigger>
                                                 <SelectContent>
@@ -273,7 +274,7 @@ export default function CustomerTable() {
                                             <Button
                                                 size="icon"
                                                 variant="outline"
-                                                className="h-8 w-8"
+                                                className="h-8 w-8 cursor-pointer"
                                                 onClick={() => table.previousPage()}
                                                 disabled={
                                                     !table.getCanPreviousPage() ||
@@ -289,7 +290,7 @@ export default function CustomerTable() {
                                             <Button
                                                 size="icon"
                                                 variant="outline"
-                                                className="h-8 w-8"
+                                                className="h-8 w-8 cursor-pointer"
                                                 onClick={() => table.nextPage()}
                                                 disabled={
                                                     !table.getCanNextPage() ||
